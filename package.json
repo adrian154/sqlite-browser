@@ -1,0 +1,26 @@
+{
+  "name": "sqlite-browser",
+  "version": "1.0.0",
+  "description": "View and manipulate SQLite databases in your web browser",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adrian154/sqlite-browser.git"
+  },
+  "keywords": [
+    "sqlite"
+  ],
+  "author": "Adrian Z",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/adrian154/sqlite-browser/issues"
+  },
+  "homepage": "https://github.com/adrian154/sqlite-browser#readme",
+  "dependencies": {
+    "better-sqlite3": "^7.6.2",
+    "express": "^4.18.1"
+  }
+}
