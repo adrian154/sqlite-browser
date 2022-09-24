@@ -7,19 +7,26 @@
     </head>
     <body>
         <main>
-            <div id="database-list">
-                <p>archive.db</p>
-                <p>circuits.db</p>
-            </div>
+            <div id="database-list"></div>
+
             <div id="console">
-                <table id="console-table">
-                    <tr>
-                        <td>&gt;</td>
-                        <td><input type="text" id="query-prompt"></td>
-                    </tr>
-                </table>
+                <div id="placeholder">
+                    <span>Select a database to begin</span>
+                </div>
             </div>
         </main>
+        <template id="console-template">
+            <table>
+                <tr class="input-row">
+                    <td>&gt;</td>
+                    <td>
+                        <form>
+                            <input type="text">
+                        </form>
+                    </td>
+                </tr>
+            </table>
+        </template>
         <script src="main.js"></script>
     </body>
 </html>

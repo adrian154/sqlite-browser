@@ -14,23 +14,24 @@ app.use(express.static("static"));
 
 app.get("/databases", (req, res) => res.json(Object.keys(databases)));
 
-app.get("/:database/:table/exec", (req, res) => {
+app.post("/exec", (req, res) => {
     
-    const db = databases[req.params.database];
-    if(!db) {
+    if(!req.query.db || !databases[req.query.db]) {
         return res.status(404).json({error: "No database with that name exists"});
     }
 
-    if(!req.query.q) {
+    if(!req.query.query) {
         return res.status(400).json({error: "Invalid parameters"});
     }
 
+    const db = databases[req.query.db];
+
     try {
-        const stmt = db.prepare(req.query.q);
+        const stmt = db.prepare(req.query.query);
         if(stmt.reader) {
-            res.json(stmt.all());
+            res.json({data: stmt.all()});
         } else {
-            res.json(stmt.run());
+            res.json({changes: stmt.run().changes});
         }
     } catch(error) {
         if(error instanceof Database.SqliteError) {
