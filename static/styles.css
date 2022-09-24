@@ -7,13 +7,13 @@ body {
 
 main {
     margin: 3rem auto;
-    max-width: 60em;
+    max-width: 100em;
     display: flex;
     flex-direction: row;
 }
 
 #database-list {
-    flex-basis: 25%;
+    flex-basis: 18em;
 }
 
 #console {
@@ -25,28 +25,26 @@ main {
     word-break: break-all;
 }
 
-#console table {
+/* ----- console table styles ----- */ 
+.console-table {
     width: 100%;
     border-collapse: collapse;
     table-layout: fixed;
 }
 
-#console table td {
-    padding: 0.25rem;
+.console-table td {
+    padding: 0.5rem;
 }
 
-#console table tr:not(:last-child) td {
+.console-row:not(:last-child) {
     border-bottom: 1px solid rgba(0, 0, 0, 8%);
 }
 
-#console table td:first-child {
+.console-row > td:first-child,
+.input-row > td:first-child {
     text-align: right;
     font-weight: bold;
     width: 2em;
-}
-
-#console table tr:last-child td:first-child {
-    color: #0000ff;
 }
 
 .input-row input[type="text"] {
@@ -57,6 +55,10 @@ main {
     font-family: inherit;
     font-size: inherit;
     outline: none;
+}
+
+.input-row td:first-child {
+    color: #0000ff;
 }
 
 #database-list p {
@@ -80,7 +82,7 @@ main {
 }
 
 .changes {
-    opacity: 80%;
+    opacity: 60%;
 }
 
 #placeholder {
@@ -94,4 +96,22 @@ main {
 
 #placeholder span {
     color: #555;
+}
+
+.results-table {
+    border-collapse: collapse;
+    margin-top: 1em;
+    width: max-content;
+}
+
+.results-table th {
+    font-weight: bold;
+    text-align: left;
+}
+
+.results-table th,
+.results-table td {
+    padding: 0.5em;
+    border: 1px solid #ccc;
+    max-width: 35em;
 }

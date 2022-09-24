@@ -2,13 +2,13 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>SQLite Browser</title>
         <link rel="stylesheet" href="styles.css">
     </head>
     <body>
         <main>
             <div id="database-list"></div>
-
             <div id="console">
                 <div id="placeholder">
                     <span>Select a database to begin</span>
@@ -16,7 +16,7 @@
             </div>
         </main>
         <template id="console-template">
-            <table>
+            <table class="console-table">
                 <tr class="input-row">
                     <td>&gt;</td>
                     <td>

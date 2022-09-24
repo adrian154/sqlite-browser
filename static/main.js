@@ -4,6 +4,7 @@ let selectedDb = null,
 
 const makeRow = query => {
     const row = document.createElement("tr");
+    row.classList.add("console-row");
     const prompt = document.createElement("td");
     prompt.textContent = ">";
     const queryCell = document.createElement("td");
@@ -44,6 +45,7 @@ fetch("/databases").then(resp => resp.json()).then(databases => {
             // save history and clear input
             history[0] = input.value;
             history.unshift("");
+            historyIndex = 0;
             input.value = "";
 
             // add row representing the query
@@ -56,6 +58,7 @@ fetch("/databases").then(resp => resp.json()).then(databases => {
             }).then(resp => resp.json()).then(resp => {
 
                 const row = document.createElement("tr");
+                row.classList.add("console-row");
                 const empty = document.createElement("td");
                 row.append(empty);
 
@@ -72,7 +75,52 @@ fetch("/databases").then(resp => resp.json()).then(databases => {
                     result.classList.add("changes");
                     result.append(`${resp.changes} ${resp.changes == 1 ? "row" : "rows"} changed`);
                 } else {
-                    console.log(resp);
+                    if(resp.data.length > 0) {
+
+                        const container = document.createElement("div");
+                        container.style.width = "100%";
+                        container.style.overflow = "auto";
+
+                        // create table
+                        const table = document.createElement("table");
+                        table.classList.add("results-table");
+                        
+                        // add columns to header
+                        const thead = document.createElement("thead");
+                        const headerRow = document.createElement("tr");
+                        for(const col in resp.data[0]) {
+                            const th = document.createElement("th");
+                            th.textContent = col;
+                            headerRow.append(th);
+                        }
+                        thead.append(headerRow);
+
+                        // add responses to body
+                        const tbody = document.createElement("tbody");
+                        for(const row of resp.data) {
+                            const tr = document.createElement("tr");
+                            for(const col in row) {
+                                const td = document.createElement("td");
+                                const value = row[col];
+                                if(value == null) {
+                                    td.classList.add("changes");
+                                    td.textContent = "null";
+                                } else {
+                                    td.textContent = value;
+                                }
+                                tr.append(td);
+                            }
+                            tbody.append(tr);
+                        }
+
+                        table.append(thead, tbody);
+                        container.append(table);
+                        result.append(container);
+
+                    } else {
+                        result.classList.add("changes");
+                        result.append("no rows returned");
+                    }
                 }
 
                 row.append(result);
