@@ -14,7 +14,7 @@ app.use(express.static("static"));
 
 app.get("/databases", (req, res) => res.json(Object.keys(databases)));
 
-app.post("/:database/:table/exec", (req, res) => {
+app.get("/:database/:table/exec", (req, res) => {
     
     const db = databases[req.params.database];
     if(!db) {

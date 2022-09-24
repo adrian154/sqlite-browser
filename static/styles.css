@@ -1,0 +1,53 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@300;400;500&display=swap');
+
+body {
+    font-family: 'Source Code Pro', monospace;
+    font-size: 14px;
+}
+
+main {
+    margin: 3rem auto;
+    max-width: 50em;
+    display: flex;
+    flex-direction: row;
+}
+
+#database-list {
+    flex-basis: 25%;
+}
+
+#console {
+    flex-basis: 100%;
+    margin-left: 1rem;
+    border: 1px solid #ddd;
+    padding: 1em 0;
+    min-height: 30em;
+}
+
+#console table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#console table td {
+    padding: 0.25rem;
+}
+
+#console table tr:not(:last-child) td {
+    border-bottom: 1px solid rgba(0, 0, 0, 8%);
+}
+
+#console table td:first-child {
+    text-align: right;
+    font-weight: bold;
+}
+
+#query-prompt {
+    width: 100%;
+    padding: 0;
+    border: none;
+    background: none;
+    font-family: inherit;
+    font-size: inherit;
+    outline: none;
+}
