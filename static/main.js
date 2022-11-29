@@ -1,3 +1,5 @@
+const TRUNCATE_VALUE_LENGTH = 200;
+
 let selectedDb = null,
     selectedDbElement = null,
     selectedDbConsole = null;
@@ -78,8 +80,9 @@ fetch("/databases").then(resp => resp.json()).then(databases => {
                     if(resp.data.length > 0) {
 
                         const container = document.createElement("div");
-                        container.style.width = "100%";
-                        container.style.overflow = "auto";
+                        container.style.width = "95%";
+                        container.style.overflowX = "auto";
+                        container.style.maxHeight = "90vh";
 
                         // create table
                         const table = document.createElement("table");
@@ -101,12 +104,34 @@ fetch("/databases").then(resp => resp.json()).then(databases => {
                             const tr = document.createElement("tr");
                             for(const col in row) {
                                 const td = document.createElement("td");
-                                const value = row[col];
+                                const value = String(row[col]);
                                 if(value == null) {
                                     td.classList.add("changes");
                                     td.textContent = "null";
-                                } else {
+                                } else if(value.length < TRUNCATE_VALUE_LENGTH) {
                                     td.textContent = value;
+                                } else {
+                                    
+                                    const truncatedValue = value.slice(0, TRUNCATE_VALUE_LENGTH) + "\u2026";
+                                    const showMoreText = `show more (${value.length})`;
+                                    const textNode = document.createTextNode(truncatedValue);
+
+                                    let truncated = true;
+                                    const showFullButton = document.createElement("a");
+                                    showFullButton.classList.add("show-more");
+                                    showFullButton.textContent = showMoreText;
+                                    showFullButton.addEventListener("click", () => {
+                                        if(truncated = !truncated) {
+                                            textNode.textContent = truncatedValue;
+                                            showFullButton.textContent = showMoreText;
+                                        } else {
+                                            textNode.textContent = value;
+                                            showFullButton.textContent = "show less";
+                                        }
+                                    });
+
+                                    td.append(textNode, " ", showFullButton);
+
                                 }
                                 tr.append(td);
                             }
