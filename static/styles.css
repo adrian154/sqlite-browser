@@ -20,8 +20,7 @@ main {
 }
 
 #database-list {
-    flex-basis: 18em;
-    padding: 1rem;
+    flex-basis: 12em;
     border-right: 1px solid #ccc;
 }
 
@@ -69,14 +68,17 @@ main {
 
 #database-list p {
     cursor: pointer;
+    padding: 0.5rem 1rem;
+    margin: 0;
 }
 
 #database-list p:hover {
-    color: #888;
+    background-color: #eee;
 }
 
 #database-list p.selected {
     font-weight: bold;
+    background-color: #94dfff;
 }
 
 #database-list p.selected:hover {
@@ -106,6 +108,7 @@ main {
 
 .results-table {
     width: max-content;
+    border-spacing: 0;
 }
 
 .results-table th {
