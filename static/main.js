@@ -1,3 +1,5 @@
+const TRUNCATE_VALUE_LENGTH = 200;
+
 let selectedDb = null,
     selectedDbElement = null,
     selectedDbConsole = null;
@@ -19,6 +21,67 @@ const consoleContainer = document.getElementById("console"),
       dbList = document.getElementById("database-list"),
       placeholder = document.getElementById("placeholder");
 
+const buildTable = rows => {
+
+    // create table
+    const table = document.createElement("table");
+    table.classList.add("results-table");
+    
+    // add columns to header
+    const thead = document.createElement("thead");
+    const headerRow = document.createElement("tr");
+    for(const col in rows[0]) {
+        const th = document.createElement("th");
+        th.textContent = col;
+        headerRow.append(th);
+    }
+    thead.append(headerRow);
+
+    // add responses to body
+    const tbody = document.createElement("tbody");
+    for(const row of rows) {
+        const tr = document.createElement("tr");
+        for(const col in row) {
+            const td = document.createElement("td");
+            const value = String(row[col]);
+            if(value == null) {
+                td.classList.add("changes");
+                td.textContent = "null";
+            } else if(value.length < TRUNCATE_VALUE_LENGTH) {
+                td.textContent = value;
+            } else {
+                
+                const truncatedValue = value.slice(0, TRUNCATE_VALUE_LENGTH) + "\u2026";
+                const showMoreText = `show more (${value.length})`;
+                const textNode = document.createTextNode(truncatedValue);
+
+                let truncated = true;
+                const showFullButton = document.createElement("a");
+                showFullButton.classList.add("show-more");
+                showFullButton.textContent = showMoreText;
+                showFullButton.addEventListener("click", () => {
+                    if(truncated = !truncated) {
+                        textNode.textContent = truncatedValue;
+                        showFullButton.textContent = showMoreText;
+                    } else {
+                        textNode.textContent = value;
+                        showFullButton.textContent = "show less";
+                    }
+                });
+
+                td.append(textNode, " ", showFullButton);
+
+            }
+            tr.append(td);
+        }
+        tbody.append(tr);
+    }
+
+    table.append(thead, tbody);
+    return table;
+
+};
+
 fetch("/databases").then(resp => resp.json()).then(databases => {
     
     for(const dbName of databases) {
@@ -28,7 +91,7 @@ fetch("/databases").then(resp => resp.json()).then(databases => {
         dbConsole.style.display = "none";
         consoleContainer.append(dbConsole);
 
-        // remember past queryes
+        // remember past queries
         const history = [];
         let historyIndex = 0;
 
@@ -41,6 +104,9 @@ fetch("/databases").then(resp => resp.json()).then(databases => {
             event.preventDefault();
 
             const query = input.value;
+            if(query.trim().length == 0) {
+                return;
+            }
 
             // save history and clear input
             history[0] = input.value;
@@ -71,52 +137,18 @@ fetch("/databases").then(resp => resp.json()).then(databases => {
                         result.append(code, " ");
                     }
                     result.append(resp.error);
-                } else if(resp.changes) {
+                } else if("changes" in resp) {
                     result.classList.add("changes");
                     result.append(`${resp.changes} ${resp.changes == 1 ? "row" : "rows"} changed`);
                 } else {
                     if(resp.data.length > 0) {
-
                         const container = document.createElement("div");
-                        container.style.width = "100%";
-                        container.style.overflow = "auto";
-
-                        // create table
-                        const table = document.createElement("table");
-                        table.classList.add("results-table");
-                        
-                        // add columns to header
-                        const thead = document.createElement("thead");
-                        const headerRow = document.createElement("tr");
-                        for(const col in resp.data[0]) {
-                            const th = document.createElement("th");
-                            th.textContent = col;
-                            headerRow.append(th);
-                        }
-                        thead.append(headerRow);
-
-                        // add responses to body
-                        const tbody = document.createElement("tbody");
-                        for(const row of resp.data) {
-                            const tr = document.createElement("tr");
-                            for(const col in row) {
-                                const td = document.createElement("td");
-                                const value = row[col];
-                                if(value == null) {
-                                    td.classList.add("changes");
-                                    td.textContent = "null";
-                                } else {
-                                    td.textContent = value;
-                                }
-                                tr.append(td);
-                            }
-                            tbody.append(tr);
-                        }
-
-                        table.append(thead, tbody);
+                        container.style.width = "95%";
+                        container.style.overflowX = "auto";
+                        container.style.maxHeight = "90vh";
+                        const table = buildTable(resp.data);
                         container.append(table);
                         result.append(container);
-
                     } else {
                         result.classList.add("changes");
                         result.append("no rows returned");
