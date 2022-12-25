@@ -1,6 +1,8 @@
 // load databases
 const Database = require("better-sqlite3");
+const {auth, claimCheck} = require("express-openid-connect");
 const fs = require("fs");
+const config = require("./config.json");
 
 const databases = {};
 for(const file of fs.readdirSync("databases")) {
@@ -9,6 +11,9 @@ for(const file of fs.readdirSync("databases")) {
 
 const express = require("express");
 const app = express();
+
+app.use(auth(config.openidSettings));
+app.use(claimCheck((req, claims) => config.allowedUsers.includes(claims.sub)));
 
 app.use(express.static("static"));
 

@@ -20,7 +20,7 @@ main {
 }
 
 #database-list {
-    flex-basis: 12em;
+    flex-basis: 15em;
     border-right: 1px solid #ccc;
 }
 
